@@ -1,5 +1,5 @@
 <?php
-   $db = new mysqli('sql12.freesqldatabase.com', 'sql12671580' , '1TraNq92BS', 'sql12671580');
+$db = new mysqli('localhost', 'root', '', 'sig');
 
 if (!$db) {
 	echo 'Could not connect to the database.';
@@ -10,11 +10,13 @@ if (!$db) {
 		if (strlen($queryString) > 0) {
 			$query = $db->query("SELECT id, country_name, latitude, longitude FROM apps_countries WHERE country_name LIKE '$queryString%' LIMIT 10");
 			if ($query) {
-				echo '<ul>';
+				echo '<ul style="list-style: none;">';
 				while ($result = $query->fetch_object()) {
-					echo '<li data-country-id="' . $result->id . '" data-latitude="' . $result->latitude . '" data-longitude="' . $result->longitude . '" onClick="fill(\''
+					
+					echo '<li content list-group-item list-group-item-action d-flex data-country-id="' . $result->id . '" data-latitude="' . $result->latitude . '" data-longitude="' . $result->longitude . '" onClick="fill(\''
 						. addslashes($result->country_name) . '\', {lat: ' . $result->latitude . ', lng: ' . $result->longitude . '});">'
 						. $result->country_name . '</li>';
+						
 				}
 				echo '</ul>';
 			} else {
@@ -29,4 +31,3 @@ if (!$db) {
 }
 
 mysqli_close($db);
-?>
