@@ -8,6 +8,6 @@ session_unset();
 // Hancurkan session
 session_destroy();
 
-// Redirect ke halaman utama
-header("Location: index.php");
+// Redirect ke halaman utama dengan parameter sukses
+header("Location: index.php?success=1");
 exit;

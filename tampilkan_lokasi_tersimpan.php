@@ -1,7 +1,22 @@
 <?php session_start() ?>
 <script type="text/javascript">
 	$(document).ready(function() {
-		var intervalId = setInterval(loadDataLokasiTersimpan, 3000);
+		var intervalId = setInterval(loadDataLokasiTersimpan, 30000);
+
+
+
+		function showAlert(message, type) {
+			var alertContainer = $("#alert-container");
+			var alertClass = 'alert-' + type;
+
+			var alertHTML = '<div class="alert ' + alertClass + ' alert-dismissible fade show" role="alert">' +
+				message +
+				'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+				'</div>';
+
+			alertContainer.html(alertHTML);
+		}
+
 
 		$(".delbutton").click(function(event) {
 			var element = $(this);
@@ -20,7 +35,11 @@
 						// Hentikan interval sebelum memulai yang baru
 						clearInterval(intervalId);
 						// Mulai interval kembali setelah penghapusan
-						intervalId = setInterval(loadDataLokasiTersimpan, 3000);
+						intervalId = setInterval(loadDataLokasiTersimpan, 30000);
+						showAlert('Berhasil menghapus data', 'success');
+					},
+					error: function() {
+						showAlert('Gagal menghapus data!', 'danger');
 					}
 				});
 			}
@@ -28,8 +47,35 @@
 			return false;
 		});
 
+		$(".editbutton").click(function() {
+			var element = $(this);
+			var edit_id = element.data("id");
+
+			// Fetch the location details via AJAX and populate the modal fields
+			$.ajax({
+				type: "POST",
+				url: "get_location_details.php", // Adjust the URL
+				data: {
+					id: edit_id
+				},
+				dataType: "json",
+				success: function(response) {
+					// Populate the modal fields
+					$("#editLocationId").val(response.id);
+					$("#editLocationName").val(response.name);
+					$("#editLocationStatus").val(response.status);
+					showAlert('Berhasil mengubah data', 'success');
+				},
+				error: function(error) {
+					console.error('Error fetching location details:', error);
+					showAlert('Gagal edit data', 'danger');
+				}
+
+			});
+		});
 	});
 </script>
+
 <?php
 include('koneksi.php');
 
@@ -37,7 +83,7 @@ include('koneksi.php');
 $whereClause = (isset($_SESSION['login']) && $_SESSION['login'] === true) ? '' : 'WHERE status = 1';
 
 // Tampilkan semua lokasi tersimpan
-$query = "SELECT * FROM kordinat_gis $whereClause ORDER BY nomor DESC ";
+$query = "SELECT * FROM kordinat_gis $whereClause ORDER BY nomor DESC LIMIT 10";
 $result = mysqli_query($db, $query) or die(mysqli_error($db));
 
 while ($koor = mysqli_fetch_assoc($result)) {
@@ -56,6 +102,7 @@ while ($koor = mysqli_fetch_assoc($result)) {
 				if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
 				?>
 					<a href="#" class="delbutton" id="<?php echo $koor['nomor']; ?>"><img width="20px" style="margin-right: 2em;" src="./trash-solid.svg" alt="trash" /></a>
+					<a href="#" class="editbutton" data-bs-toggle="modal" data-bs-target="#editModal" data-id="<?php echo $koor['nomor']; ?>"><img width="20px" style="margin-right: 2em;" src="./edit-solid.svg" alt="edit" /></a>
 					<!-- Example single danger button -->
 				<?php
 				}
@@ -66,3 +113,4 @@ while ($koor = mysqli_fetch_assoc($result)) {
 <?php
 }
 ?>
+<div id="alert-container" style="position: fixed; top: 10px; right: 10px; z-index: 1000;"></div>

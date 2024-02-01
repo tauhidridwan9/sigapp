@@ -1,5 +1,5 @@
 <?php
- session_start();
+session_start();
 // Koneksi ke database
 include 'koneksi.php';
 // Periksa koneksi
@@ -21,17 +21,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['login'] = true;
         $_SESSION['username'] = $username;
 
-        echo "<div class='alert alert-danger' role='alert'>";
-        echo "A simple danger alert—check it out!";
-        echo "</div>";
 
         // Redirect ke halaman utama
         header("Location: index.php");
     } else {
         // Kredensial salah, beri pesan kesalahan
-        echo "<div class='alert alert-danger' role='alert'>";
-        echo "A simple danger alert—check it out!";
-        echo "</div>";
         header("Location: index.php");
     }
 }

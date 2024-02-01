@@ -1,33 +1,23 @@
 <?php
-$db = new mysqli('localhost', 'root', '', 'sig');
+include('koneksi.php');
 
-if (!$db) {
-	echo 'Could not connect to the database.';
-} else {
-	if (isset($_POST['queryString'])) {
-		$queryString = $db->real_escape_string($_POST['queryString']);
+$output = '';
+if (isset($_POST['queryString'])) {
+	$queryString = $_POST['queryString'];
+	$query = "SELECT * FROM kordinat_gis WHERE nama_tempat LIKE '%$queryString%'";
+	$result = mysqli_query($db, $query);
 
-		if (strlen($queryString) > 0) {
-			$query = $db->query("SELECT id, country_name, latitude, longitude FROM apps_countries WHERE country_name LIKE '$queryString%' LIMIT 10");
-			if ($query) {
-				echo '<ul style="list-style: none;">';
-				while ($result = $query->fetch_object()) {
-					
-					echo '<li content list-group-item list-group-item-action d-flex data-country-id="' . $result->id . '" data-latitude="' . $result->latitude . '" data-longitude="' . $result->longitude . '" onClick="fill(\''
-						. addslashes($result->country_name) . '\', {lat: ' . $result->latitude . ', lng: ' . $result->longitude . '});">'
-						. $result->country_name . '</li>';
-						
-				}
-				echo '</ul>';
-			} else {
-				echo 'OOPS we had a problem :(';
-			}
-		} else {
-			// do nothing
+	if ($result) {
+		while ($row = mysqli_fetch_assoc($result)) {
+			$latitude = $row['x'];
+			$longitude = $row['y'];
+			$locationName = $row['nama_tempat'];
+
+			// Tampilkan nama_tempat sebagai opsi autosuggest
+			$output .= "<li class='content list-group-item list-group-item-action d-flex'data-locationname='$locationName' data-latitude='$latitude' data-longitude='$longitude'>$locationName</li>";
 		}
+		echo $output;
 	} else {
-		echo 'There should be no direct access to this script!';
+		echo 'Query execution error';
 	}
 }
-
-mysqli_close($db);
