@@ -172,7 +172,7 @@
          function loadDataLokasiTersimpan() {
              $('#kordinattersimpan').load('tampilkan_lokasi_tersimpan.php');
          }
-         setInterval(loadDataLokasiTersimpan, 3000);
+         setInterval(loadDataLokasiTersimpan, 30000);
 
          function carikordinat(lokasi) {
              var settingpeta = {

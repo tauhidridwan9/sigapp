@@ -79,11 +79,17 @@
 <?php
 include('koneksi.php');
 
-// Tentukan klausa WHERE berdasarkan status sesi login
-$whereClause = (isset($_SESSION['login']) && $_SESSION['login'] === true) ? '' : 'WHERE status = 1';
+// Check if the user is logged in
+if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
+	$whereClause = ''; // User is logged in, so no WHERE clause
+	$descLimit = '';
+} else {
+	$whereClause = 'WHERE status = 1';
+	$descLimit = ' DESC LIMIT 10'; // User is not logged in, so use the existing WHERE clause
+}
 
 // Tampilkan semua lokasi tersimpan
-$query = "SELECT * FROM kordinat_gis $whereClause ORDER BY nomor DESC LIMIT 10";
+$query = "SELECT * FROM kordinat_gis $whereClause ORDER BY nomor $descLimit ";
 $result = mysqli_query($db, $query) or die(mysqli_error($db));
 
 while ($koor = mysqli_fetch_assoc($result)) {

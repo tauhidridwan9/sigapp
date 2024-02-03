@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.1
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: sql12.freesqldatabase.com
--- Generation Time: Dec 20, 2023 at 10:47 AM
--- Server version: 5.5.62-0ubuntu0.14.04.1
--- PHP Version: 7.0.33-0ubuntu0.16.04.16
+-- Host: 127.0.0.1
+-- Generation Time: Feb 01, 2024 at 04:59 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `sql12671580`
+-- Database: `sig`
 --
 
 -- --------------------------------------------------------
@@ -34,7 +33,7 @@ CREATE TABLE `apps_countries` (
   `country_name` varchar(100) NOT NULL DEFAULT '',
   `latitude` varchar(25) NOT NULL,
   `longitude` varchar(25) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `apps_countries`
@@ -276,6 +275,60 @@ INSERT INTO `apps_countries` (`id`, `country_code`, `country_name`, `latitude`, 
 (233, 'UZ', 'Uzbekistan', '41.377491', '64.585262'),
 (234, 'VU', 'Vanuatu', '-15.376706', '166.959158');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kordinat_gis`
+--
+
+CREATE TABLE `kordinat_gis` (
+  `nomor` int(5) NOT NULL,
+  `x` decimal(8,5) NOT NULL,
+  `y` decimal(8,5) NOT NULL,
+  `nama_tempat` varchar(100) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `kordinat_gis`
+--
+
+INSERT INTO `kordinat_gis` (`nomor`, `x`, `y`, `nama_tempat`, `status`) VALUES
+(7, -8.21961, 114.34965, 'Banyuwangi', 0),
+(10, -8.72490, 115.17981, 'Pantai Kuta', 0),
+(11, -8.24272, 114.48629, 'Melaya', 0),
+(12, -8.64887, 115.19354, 'Denpasar', 0),
+(13, -8.41121, 115.14273, 'Penebel', 1),
+(14, -7.70687, 113.97817, 'Situbondo', 0),
+(15, -8.43838, 115.62063, 'Karangasem', 0),
+(16, -8.55247, 115.03836, 'Kerambitan', 0),
+(17, -8.31202, 115.02188, 'Pupuan', 1),
+(18, -8.00072, 114.40390, 'Wongsorejo', 0),
+(19, -8.44109, 115.31714, 'Tampak Siring', 0),
+(20, -8.73440, 115.54648, 'Nusa Penida', 1),
+(21, -8.14756, 115.11389, 'Sukasada', 1),
+(22, -8.54296, 115.12350, 'Tabanan', 1),
+(24, -8.27839, 114.29455, 'Macan Putih', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `operator`
+--
+
+CREATE TABLE `operator` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(40) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `operator`
+--
+
+INSERT INTO `operator` (`id`, `username`, `password`) VALUES
+(1, 'admin', '40bd001563085fc35165329ea1ff5c5ecbdbbeef');
+
 --
 -- Indexes for dumped tables
 --
@@ -287,6 +340,18 @@ ALTER TABLE `apps_countries`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `kordinat_gis`
+--
+ALTER TABLE `kordinat_gis`
+  ADD PRIMARY KEY (`nomor`);
+
+--
+-- Indexes for table `operator`
+--
+ALTER TABLE `operator`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -294,7 +359,20 @@ ALTER TABLE `apps_countries`
 -- AUTO_INCREMENT for table `apps_countries`
 --
 ALTER TABLE `apps_countries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=235;COMMIT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=235;
+
+--
+-- AUTO_INCREMENT for table `kordinat_gis`
+--
+ALTER TABLE `kordinat_gis`
+  MODIFY `nomor` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+
+--
+-- AUTO_INCREMENT for table `operator`
+--
+ALTER TABLE `operator`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
